@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  app:
+    container_name: 'pirmez_calculo_repasse'
+    build: .
+    volumes:
+      - ./src:/usr/src/app

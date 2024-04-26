@@ -1,0 +1,6 @@
+Projeto voltado para automatizar processos manuais e repetitivos realizados na Clínica Pirmez.
+
+Procesos manuais identificados:
+1. Planilha de Repasse de médicos parceiros
+    1.1 Preenchimento da planilha (data, médico, cliente, procedimento, valor)
+    1.2 Cálculo de repasse (% valor / procedimento)
