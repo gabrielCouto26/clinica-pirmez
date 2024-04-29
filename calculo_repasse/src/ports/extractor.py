@@ -15,5 +15,5 @@ class FileExtractor:
         assert extractor, 'Invalid extractor provided'
         self.extractor = extractor
 
-    def extract(self) -> DataFrame:
-        return self.extractor.extract()
+    def extract(self, path: str) -> DataFrame:
+        return self.extractor.extract(path)
