@@ -16,4 +16,7 @@ class FileLoader:
         self.loader = loader
 
     def load(self, data: DataFrame, dest: str) -> None:
-        self.loader.load(data, dest)
+        try:
+            self.loader.load(data, dest)
+        except Exception as e:
+            raise Exception('Error loading data. Original error:', e)

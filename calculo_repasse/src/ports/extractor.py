@@ -16,4 +16,7 @@ class FileExtractor:
         self.extractor = extractor
 
     def extract(self, path: str) -> DataFrame:
-        return self.extractor.extract(path)
+        try:
+            return self.extractor.extract(path)
+        except Exception as e:
+            raise Exception('Error extracting data. Original error:', e)
