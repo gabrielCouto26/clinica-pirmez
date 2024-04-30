@@ -1,3 +1,4 @@
+from pandas import DataFrame
 from typing import Protocol
 
 
@@ -14,5 +15,5 @@ class FileLoader:
         assert loader, 'Invalid loader provided'
         self.loader = loader
 
-    def extract(self) -> None:
-        self.loader.load()
+    def load(self, data: DataFrame, dest: str) -> None:
+        self.loader.load(data, dest)
