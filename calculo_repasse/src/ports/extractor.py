@@ -1,5 +1,6 @@
 from pandas import DataFrame
 from typing import Protocol
+from libs.helpers import timestamp
 
 
 class Extractor(Protocol):
@@ -15,6 +16,7 @@ class FileExtractor:
         assert extractor, 'Invalid extractor provided'
         self.extractor = extractor
 
+    @timestamp
     def extract(self, path: str) -> DataFrame:
         try:
             return self.extractor.extract(path)

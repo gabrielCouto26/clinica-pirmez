@@ -4,8 +4,10 @@ from adapters.loaders import LocalLoader
 from ports.extractor import FileExtractor
 from ports.loader import FileLoader
 from domain.transformer import Transformer
+from libs.helpers import timestamp
 
 
+@timestamp
 def main():
     FILE_PATH = os.getenv('FILE_PATH')
     assert FILE_PATH, 'Invalid FILE_PATH provided'
