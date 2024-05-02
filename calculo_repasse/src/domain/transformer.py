@@ -1,5 +1,5 @@
 import pandas as pd
-from libs.helpers import timestamp
+from libs.helpers import timestamp, type_check
 
 
 PROCEDURES_SHARE = {
@@ -14,6 +14,7 @@ class Transformer:
         pass
 
     @timestamp
+    @type_check
     def calculate_share(self, data: pd.DataFrame) -> pd.DataFrame:
         assert not data.empty, 'Invalid data provided: empty'
         assert isinstance(data, pd.DataFrame)
