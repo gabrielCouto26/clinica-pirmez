@@ -28,7 +28,9 @@ class Transformer:
                 'Error defining "repasse" column. Original error:', e)
 
         try:
-            final = data.groupby(['medico']).agg({'repasse': 'sum'})
+            final = data.groupby(['medico']).agg(
+                {'repasse': 'sum'}
+            ).reset_index()
         except Exception as e:
             raise Exception('Error summing "repasse". Original error:', e)
 
