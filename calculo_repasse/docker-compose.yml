@@ -11,3 +11,10 @@ services:
     environment:
       - FILE_PATH=./input/exemplo-input.csv
       - LOAD_PATH=./output/exemplo-output.csv
+
+  test:
+    container_name: 'test_pirmez_calculo_repasse'
+    build: .
+    volumes:
+      - ./src:/usr/src/app
+    command: 'python -m unittest discover -s tests -p "*_test.py"'
