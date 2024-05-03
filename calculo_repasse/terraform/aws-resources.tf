@@ -112,6 +112,12 @@ resource "aws_iam_role_policy_attachment" "lambda_ecr_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+
 resource "aws_lambda_function" "calculo_repasse" {
   depends_on = [
     null_resource.ecr_image
