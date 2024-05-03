@@ -140,6 +140,10 @@ output "lambda_name" {
   value = aws_lambda_function.calculo_repasse.id
 }
 
+output "lambda_image_uri" {
+  value = aws_lambda_function.calculo_repasse.image_uri
+}
+
 ######## CLOUD WATCH ########
 
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
