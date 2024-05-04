@@ -11,6 +11,10 @@ locals {
 
 resource "aws_ecr_repository" "repo" {
   name = local.ecr_repository_name
+
+  provisioner "local-exec" {
+    command = "bash ../ecr-update.sh"
+  }
 }
 
 resource "null_resource" "ecr_image" {
@@ -18,14 +22,6 @@ resource "null_resource" "ecr_image" {
     python_file = md5(file("../src/main.py"))
     docker_file = md5(file("../Dockerfile"))
   }
-}
-
-data "aws_ecr_image" "lambda_image" {
-  depends_on = [
-    null_resource.ecr_image
-  ]
-  repository_name = local.ecr_repository_name
-  image_tag       = local.ecr_image_tag
 }
 
 ######## S3 ########
