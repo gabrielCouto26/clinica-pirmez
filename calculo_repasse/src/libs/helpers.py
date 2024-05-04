@@ -6,10 +6,10 @@ logging.basicConfig(format='%(levelname)s -> %(message)s', level=logging.WARN)
 
 def timestamp(func):
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args):
         start = datetime.now()
 
-        resultado = func(*args, **kwargs)
+        resultado = func(*args)
 
         end = datetime.now()
         print(f'-> {func.__name__} took {end-start} seconds.')

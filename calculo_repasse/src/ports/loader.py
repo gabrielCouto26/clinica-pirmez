@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from typing import Protocol
-from libs.helpers import timestamp, type_check
+from src.libs.helpers import timestamp, type_check
 
 
 class Loader(Protocol):

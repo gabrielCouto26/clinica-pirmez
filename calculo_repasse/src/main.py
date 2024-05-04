@@ -1,15 +1,21 @@
 import os
-from adapters.extractors import LocalExtractor
-from adapters.loaders import LocalLoader
-from ports.extractor import FileExtractor
-from ports.loader import FileLoader
-from domain.transformer import Transformer
-from libs.helpers import timestamp
+from src.adapters.extractors import LocalExtractor
+from src.adapters.loaders import LocalLoader
+from src.ports.extractor import FileExtractor
+from src.ports.loader import FileLoader
+from src.domain.transformer import Transformer
+from src.libs.helpers import timestamp
 
 
 @timestamp
-def main():
-    FILE_PATH = os.getenv('FILE_PATH')
+def lambda_handler(event, context):
+    # FILE_PATH = os.getenv('FILE_PATH')
+    bucket = event['Records'][0]['s3']['bucket']['name']
+    key = event['Records'][0]['s3']['object']['key']
+
+    FILE_PATH = f"{bucket}/{key}"
+    print('\n###### -> FILE_PATH\n', FILE_PATH)
+
     assert FILE_PATH, 'Invalid FILE_PATH provided'
 
     LOAD_PATH = os.getenv('LOAD_PATH')
@@ -28,7 +34,3 @@ def main():
     file_data = file_extractor.extract(FILE_PATH)
     df = transformer.calculate_share(file_data)
     file_loader.load(df, LOAD_PATH)
-
-
-if __name__ == '__main__':
-    main()
