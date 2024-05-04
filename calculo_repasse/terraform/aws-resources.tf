@@ -53,20 +53,6 @@ resource "aws_lambda_permission" "s3_invoke_lambda_permission" {
   source_arn    = aws_s3_bucket.clinica_pirmez.arn
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
-  depends_on = [
-    aws_lambda_function.calculo_repasse
-  ]
-  bucket = aws_s3_bucket.clinica_pirmez.id
-
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.calculo_repasse.arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "consultas/"
-    filter_suffix       = ".csv"
-  }
-}
-
 ######## LAMBDA ########
 
 resource "aws_iam_role" "lambda" {
@@ -87,34 +73,6 @@ resource "aws_iam_role" "lambda" {
  EOF
 }
 
-resource "aws_iam_policy" "lambda" {
-  name = "${local.prefix}-lambda-policy"
-  path = "/"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = "*"
-        Sid      = "CreateCloudWatchLogs"
-      },
-      {
-        Effect   = "Allow"
-        Action   = "s3:GetObject"
-        Resource = aws_s3_bucket.clinica_pirmez.arn
-        Sid      = "S3GetObject"
-      }
-    ]
-  })
-}
-
-
 resource "aws_iam_role_policy_attachment" "lambda_ecr_policy_attachment" {
   role       = aws_iam_role.lambda.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
@@ -125,6 +83,10 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" 
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_s3_access" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
 
 resource "aws_lambda_function" "calculo_repasse" {
   depends_on = [
@@ -142,6 +104,20 @@ resource "aws_lambda_function" "calculo_repasse" {
       FILE_PATH = "s3://${aws_s3_bucket.clinica_pirmez.bucket}/consultas/$${s3:ObjectKey}"
       LOAD_PATH = "s3://${aws_s3_bucket.clinica_pirmez.bucket}/repasses/repasses.csv"
     }
+  }
+}
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  depends_on = [
+    aws_lambda_function.calculo_repasse
+  ]
+  bucket = aws_s3_bucket.clinica_pirmez.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.calculo_repasse.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "consultas/"
+    filter_suffix       = ".csv"
   }
 }
 
