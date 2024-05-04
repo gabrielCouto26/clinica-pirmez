@@ -58,6 +58,9 @@ resource "aws_lambda_permission" "s3_invoke_lambda_permission" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
+  depends_on = [
+    aws_lambda_function.calculo_repasse
+  ]
   bucket = aws_s3_bucket.clinica_pirmez.id
 
   lambda_function {
@@ -120,7 +123,8 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" 
 
 resource "aws_lambda_function" "calculo_repasse" {
   depends_on = [
-    null_resource.ecr_image
+    null_resource.ecr_image,
+    aws_s3_bucket.clinica_pirmez
   ]
   function_name = "${local.prefix}-lambda"
   role          = aws_iam_role.lambda.arn
