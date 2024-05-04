@@ -87,24 +87,33 @@ resource "aws_iam_role" "lambda" {
  EOF
 }
 
-data "aws_iam_policy_document" "lambda" {
-  statement {
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
+resource "aws_iam_policy" "lambda" {
+  name = "${local.prefix}-lambda-policy"
+  path = "/"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
+        Sid      = "CreateCloudWatchLogs"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "s3:GetObject"
+        Resource = aws_s3_bucket.clinica_pirmez.arn
+        Sid      = "S3GetObject"
+      }
     ]
-    effect    = "Allow"
-    resources = ["*"]
-    sid       = "CreateCloudWatchLogs"
-  }
+  })
 }
 
-resource "aws_iam_policy" "lambda" {
-  name   = "${local.prefix}-lambda-policy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.lambda.json
-}
 
 resource "aws_iam_role_policy_attachment" "lambda_ecr_policy_attachment" {
   role       = aws_iam_role.lambda.name
