@@ -1,8 +1,5 @@
-data "aws_caller_identity" "current" {}
-
 locals {
   prefix              = "calculo-repasse"
-  account_id          = data.aws_caller_identity.current.account_id
   ecr_repository_name = "${local.prefix}-lambda-container"
   ecr_image_tag       = "latest"
 }
@@ -14,13 +11,6 @@ resource "aws_ecr_repository" "repo" {
 
   provisioner "local-exec" {
     command = "bash ../ecr-update.sh"
-  }
-}
-
-resource "null_resource" "ecr_image" {
-  triggers = {
-    python_file = md5(file("../src/main.py"))
-    docker_file = md5(file("../Dockerfile"))
   }
 }
 
@@ -90,7 +80,6 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_access" {
 
 resource "aws_lambda_function" "calculo_repasse" {
   depends_on = [
-    null_resource.ecr_image,
     aws_s3_bucket.clinica_pirmez
   ]
   function_name = "${local.prefix}-lambda"
