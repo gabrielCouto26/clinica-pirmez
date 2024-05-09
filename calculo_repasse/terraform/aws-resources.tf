@@ -75,7 +75,7 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" 
 
 resource "aws_iam_role_policy_attachment" "lambda_s3_access" {
   role       = aws_iam_role.lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_lambda_function" "calculo_repasse" {
