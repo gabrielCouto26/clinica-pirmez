@@ -13,4 +13,4 @@ class LocalLoader:
         file_name = 'repasses.csv'
         dest += file_name
 
-        data.to_csv(dest)
+        data.to_csv(dest, index=False)
