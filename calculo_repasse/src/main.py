@@ -6,20 +6,20 @@ from src.ports.loader import FileLoader
 from src.domain.transformer import Transformer
 from src.libs.helpers import timestamp
 
+print('Loading function 2')
+
 
 @timestamp
 def lambda_handler(event, context):
-    # FILE_PATH = os.getenv('FILE_PATH')
-    bucket = event['Records'][0]['s3']['bucket']['name']
-    key = event['Records'][0]['s3']['object']['key']
+    s3_event = event['Records'][0]['s3']
+    bucket = s3_event['bucket']['name']
+    key = s3_event['object']['key']
 
-    FILE_PATH = f"{bucket}/{key}"
-    print('\n###### -> FILE_PATH\n', FILE_PATH)
-
+    FILE_PATH = f"s3://{bucket}/{key}"
     assert FILE_PATH, 'Invalid FILE_PATH provided'
 
-    LOAD_PATH = os.getenv('LOAD_PATH')
-    assert LOAD_PATH, 'Invalid LOAD_PATH provided'
+    LOAD_FOLDER = os.getenv('LOAD_FOLDER')
+    assert LOAD_FOLDER, 'Invalid LOAD_FOLDER provided'
 
     extractor = LocalExtractor()
     loader = LocalLoader()
@@ -33,4 +33,4 @@ def lambda_handler(event, context):
 
     file_data = file_extractor.extract(FILE_PATH)
     df = transformer.calculate_share(file_data)
-    file_loader.load(df, LOAD_PATH)
+    file_loader.load(df, LOAD_FOLDER)

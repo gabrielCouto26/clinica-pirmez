@@ -10,4 +10,7 @@ class LocalLoader:
         assert isinstance(data, pd.DataFrame)
         assert isinstance(dest, str)
 
+        file_name = 'repasses.csv'
+        dest += file_name
+
         data.to_csv(dest)

@@ -90,8 +90,7 @@ resource "aws_lambda_function" "calculo_repasse" {
 
   environment {
     variables = {
-      FILE_PATH = "s3://${aws_s3_bucket.clinica_pirmez.bucket}/consultas/$${s3:ObjectKey}"
-      LOAD_PATH = "s3://${aws_s3_bucket.clinica_pirmez.bucket}/repasses/repasses.csv"
+      LOAD_FOLDER = "s3://${aws_s3_bucket.clinica_pirmez.bucket}/repasses/"
     }
   }
 }
