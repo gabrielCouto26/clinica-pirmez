@@ -13,3 +13,14 @@ provider "aws" {
   profile = "ClinicaPirmezTerraform"
   region  = "us-east-1"
 }
+
+variable "lambda_prefix" {
+  default     = "calculo-repasse"
+  description = "Lambda's name prefix"
+}
+
+variable "lambda_image_tag" {
+  type        = string
+  default     = "latest"
+  description = "Lambda's image tag"
+}
