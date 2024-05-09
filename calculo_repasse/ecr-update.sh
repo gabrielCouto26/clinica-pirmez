@@ -1,18 +1,22 @@
 #!bin/bash
 
+image_name='calculo-repasse-lambda'
+
 aws --profile ClinicaPirmezTerraform \
     ecr get-login-password | \
     docker login --username AWS --password-stdin 415953478593.dkr.ecr.us-east-1.amazonaws.com
 
-docker build -t calculo-repasse-lambda:latest . -f Dockerfile.lambda
-docker tag calculo-repasse-lambda:latest 415953478593.dkr.ecr.us-east-1.amazonaws.com/calculo-repasse-lambda-container:latest
-docker push 415953478593.dkr.ecr.us-east-1.amazonaws.com/calculo-repasse-lambda-container:latest
+echo "-> Atualizando imagem: $image_name"
 
-echo "Imagem Docker atualizada!"
+docker build -t $image_name:latest . -f Dockerfile.lambda
+docker tag $image_name:latest 415953478593.dkr.ecr.us-east-1.amazonaws.com/$image_name:latest
+docker push 415953478593.dkr.ecr.us-east-1.amazonaws.com/$image_name:latest
+
+echo "-> Imagem Docker atualizada!"
 
 aws --profile ClinicaPirmezTerraform \
     lambda update-function-code \
-    --function-name calculo-repasse-lambda \
-    --image-uri 415953478593.dkr.ecr.us-east-1.amazonaws.com/calculo-repasse-lambda-container:latest
+    --function-name $image_name \
+    --image-uri 415953478593.dkr.ecr.us-east-1.amazonaws.com/$image_name:latest
 
-echo "Função Lambda atualizada!"
+echo "-> Função Lambda atualizada!"

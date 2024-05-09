@@ -1,6 +1,6 @@
 locals {
   prefix              = "calculo-repasse"
-  ecr_repository_name = "${local.prefix}-lambda-container"
+  ecr_repository_name = "${local.prefix}-lambda"
   ecr_image_tag       = "latest"
 }
 
