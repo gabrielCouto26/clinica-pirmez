@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from typing import Protocol
-from src.libs.helpers import timestamp, type_check
+from src.libs.helpers import timestamp
 
 
 class Extractor(Protocol):
@@ -17,7 +17,6 @@ class FileExtractor:
         self.extractor = extractor
 
     @timestamp
-    @type_check
     def extract(self, path: str) -> DataFrame:
         try:
             return self.extractor.extract(path)
