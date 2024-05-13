@@ -1,9 +1,12 @@
 import pandas as pd
 
 
-class LocalLoader:
+class Local:
     def __init__(self) -> None:
         pass
+
+    def extract(self, path: str) -> pd.DataFrame:
+        return pd.read_csv(path)
 
     def load(self, data: pd.DataFrame, dest: str) -> None:
         assert not data.empty, 'Invalid data provided: empty'
