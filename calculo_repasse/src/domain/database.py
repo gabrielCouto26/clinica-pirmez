@@ -1,10 +1,12 @@
 from src.ports import DataStorage
+from src.libs.helpers import timestamp
 
 
 class Database:
     def __init__(self, database: DataStorage) -> None:
         self.database = database
 
+    @timestamp
     def fetch(self, table: str) -> list[dict]:
         assert isinstance(table, str)
 

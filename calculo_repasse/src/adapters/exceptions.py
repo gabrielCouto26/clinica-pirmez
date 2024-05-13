@@ -14,3 +14,15 @@ class FetchDataError(Exception):
     def __init__(self, excepetion: Exception, table: str) -> None:
         print(f"""Error fetching data from table {table}.
               Original error: {excepetion}""")
+
+
+class SanitizeDataError(Exception):
+    def __init__(self, excepetion: Exception, table: str) -> None:
+        print(f"""Error sanitizing data from table {table}.
+              Original error: {excepetion}""")
+
+
+class DeserializeDataError(Exception):
+    def __init__(self, excepetion: Exception, value: str) -> None:
+        print(f"""Error deserializing value {value}.
+              Original error: {excepetion}""")
