@@ -16,7 +16,6 @@ def lambda_handler(event, context):
 
     s3_adapter = S3Adapter()
     storage = Storage(s3_adapter)
-
     transformer = Transformer()
 
     file_data = storage.extract(bucket, key)
