@@ -17,6 +17,9 @@ class S3Adapter:
             raise FileExtractError(e, path)
 
     def load(self, data: pd.DataFrame, dest: str) -> None:
+        if self.s3_prefix not in dest:
+            dest = self.s3_prefix + dest
+
         try:
             assert not data.empty, 'Invalid data provided: empty'
             assert isinstance(data, pd.DataFrame)
