@@ -1,7 +1,10 @@
 import os
 from src.domain.transformer import Transformer
 from src.domain.storage import Storage
+from src.domain.database import Database
+from src.domain.constants import PROCEDURE_TABLE
 from src.adapters.s3_adapter import S3Adapter
+from src.adapters.dynamodb import DynamoDB
 from src.libs.helpers import timestamp
 
 
@@ -16,8 +19,15 @@ def lambda_handler(event, context):
 
     s3_adapter = S3Adapter()
     storage = Storage(s3_adapter)
+
+    dynamoDB = DynamoDB()
+    database = Database(dynamoDB)
+
     transformer = Transformer()
 
     file_data = storage.extract(bucket, key)
-    df = transformer.calculate_share(file_data)
+    procedure_share = database.fetch(PROCEDURE_TABLE)
+
+    df = transformer.calculate_share(file_data, procedure_share)
+
     storage.load(df, LOAD_FOLDER)

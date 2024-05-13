@@ -2,26 +2,19 @@ import pandas as pd
 from src.libs.helpers import timestamp
 
 
-PROCEDURES_SHARE = {
-    'procedimento1': 30 / 100,
-    'procedimento2': 20 / 100,
-    'procedimento3': 40 / 100,
-}
-
-
 class Transformer:
     def __init__(self) -> None:
         pass
 
     @timestamp
-    def calculate_share(self, data: pd.DataFrame) -> pd.DataFrame:
+    def calculate_share(self, data: pd.DataFrame, procedure_share: dict) -> pd.DataFrame:
         assert not data.empty, 'Invalid data provided: empty'
         assert isinstance(data, pd.DataFrame)
 
         try:
             data['repasse'] = pd.Series()
             data['repasse'] = (
-                data['procedimento'].map(PROCEDURES_SHARE)
+                data['procedimento'].map(procedure_share)
                 * data['valor'])
         except Exception as e:
             raise Exception(
